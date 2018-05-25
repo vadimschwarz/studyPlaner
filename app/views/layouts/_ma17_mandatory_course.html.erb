@@ -1,0 +1,57 @@
+<div class="card coursecard">
+  <div class="card-header card-header-format">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma17_mandatory_<%=identifier%>"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span title="Mandatory Module <%=identifier%>" style="font-size:0.8rem;">Mandatory Module <%=identifier%></span>
+      </a>
+      <i id="ma17_iconwarning_<%=identifier%>" title="Important Notice! See within the Module!" class="fa fa-exclamation-triangle" style="display:none;"></i>
+      <span class="badge badge-pill rounded float-right" focusarea="" id="fa_badge_<%=identifier%>"
+        style="margin-left:5px;"></span>
+      <span class="badge badge-pill rounded float-right" id="ECTS">ECTS 6.0</span>
+  </div>
+  <div class="collapse" id="collapse_ma17_mandatory_<%=identifier%>">
+    <div class="card-body card-body-format">
+      <!-- content of the ma course -->
+      <div class="input-group input-group-sm">
+        <%= select_tag "ma17_focusarea_" + identifier,
+        options_for_select( @focusareas.all.map{ |fa| [fa.field_name, fa.field_abrev]}.insert( 0 ,["Select Focus Area", ""] )),
+        {class:"custom-select form-control", autocomplete: "off" }%>
+      </div>
+
+      <div id="ma17_mandatory_<%=identifier%>" style="padding:1%; display:none;">
+        <hr class="my-2">
+        <div id="ma17_warningbox_<%=identifier%>" style="font-size: 0.7rem; border: 1px solid lightgrey; border-radius: 5px; display:none; margin-bottom:0.5%;">
+          <div style="padding:0.5rem;">
+            Important Notice: If the selected course was passed after SS17 according
+            the examination regulations from 2009, then a mandatory ungraded task needs
+            to be complied to pass the course. The appropriate task will be issued by
+            the professor in charge. Regardless of further mandatory tasks accomplished,
+            the grade and failed attempts remain the same.
+          </div>
+        </div>
+
+        <div class="input-group input-group-sm" style="margin-bottom:1%;">
+          <%= select_tag "ma17_course_" + identifier, grouped_options_for_select(
+            @focusareas.all.map{ |group| [ group.field_abrev, group.ma_course_to_focusareas.map{
+              |course| [course.ma_course.course_name, course.course_abrev, {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                {class:"custom-select form-control", autocomplete: "off"}%>
+        </div>
+        <div class="input-group input-group-sm" style="padding-left:35%">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="font-size: 0.8rem;">Grade</span>
+          </div>
+          <%= select_tag "ma17_grade_" + identifier,
+          options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off", disabled: "true"} %>
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text" style="font-size: 0.8rem;">Attempt</span>
+          </div>
+          <%= select_tag "ma17_attempt_" + identifier, options_for_select((0..3).step(1)),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off", disabled: "true"} %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

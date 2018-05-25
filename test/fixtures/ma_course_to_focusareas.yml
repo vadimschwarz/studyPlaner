@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course_abrev: MyString
+  field_abrev: MyString
+  in_mhb: false
+
+two:
+  course_abrev: MyString
+  field_abrev: MyString
+  in_mhb: false

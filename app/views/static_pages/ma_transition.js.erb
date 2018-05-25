@@ -1,0 +1,258 @@
+$("#ma17").html('<%= j render partial: "layouts/ma17_full"%>');
+$("#ma09_panel").hide().removeClass("single");
+$("#collapse_base17").collapse("show");
+$("#collapse_main17").collapse("show");
+$("#info_transition_ma17").modal("show");
+
+$("#hs_button").show().click(function(){
+  if($("#ma09_panel").is(":visible")){
+    $(this).text("Show Master PO 09");
+
+    $("#ma09_panel").hide();
+    $("#ma17_panel").addClass("single")
+      .removeClass("double-left");
+  } else {
+    $(this).text("Hide Master PO 09");
+
+    $("#ma09_panel").show()
+      .addClass("double-right");
+    $("#ma17_panel").removeClass("single")
+      .addClass("double-left");
+  }
+});
+//### functionality for transition ###
+
+// transition all selected courses from ba09 ba attaching grade and attempt
+// attr to the same courses under ma17. The Filtering takes the first CourseSelect
+// as default for all values therefore the data only is placed in this SelectBox.
+$("[id^=ma09_module_]").each(function(){
+  var field_abrev = $(this).attr("id").replace("ma09_module_","");
+
+  $("[id^=ma09_course_" + field_abrev+"]").each(function(){
+      var sel_value = $(this).val();
+      if($("#ma09_grade_" + field_abrev).val()!="0" &&
+          $("#ma09_attempt_" + field_abrev).val()!="0"){
+
+            $("[id=ma17_course_1] option").each( function(){
+              if(sel_value != "" && $(this).val() == sel_value ){
+                $(this).attr("grade", $("#ma09_grade_" + field_abrev).val())
+                      .attr("attempt", $("#ma09_attempt_" + field_abrev).val())
+                      .css("background-color","rgb(180, 237, 183)");
+
+                $("#collapse_ma17_mand_panel").collapse("show");
+                $("#collapse_ma17_mandatory_1").collapse("show");
+              }
+            });
+      }
+  });
+
+  $("[id^=ma09_seminar_"+field_abrev+"]").each(function(){
+
+    if($(this).val() != ""){
+      if($("#ma17_seminar1").val()==""){
+        $("#ma17_icon_seminars").show();
+        $("#ma17_seminar1").val($(this).val());
+
+        if($("#ma09_grade_"+field_abrev).val() != "0" &&
+            $("#ma09_attempt_"+field_abrev).val() != "0"){
+              $("#ma17_seminar1_grade").val($("#ma09_grade_"+field_abrev).val());
+              $("#ma17_seminar1_attempt").val($("#ma09_attempt_"+field_abrev).val());
+              $("#collapse_ma17_seminars").collapse("show");
+        }
+
+      }else{
+        $("#ma17_seminar2").val($(this).val());
+
+        if($("#ma09_grade_"+field_abrev).val() != "0" &&
+            $("#ma09_attempt_"+field_abrev).val() != "0"){
+              $("#ma17_seminar2_grade").val($("#ma09_grade_"+field_abrev).val());
+              $("#ma17_seminar2_attempt").val($("#ma09_attempt_"+field_abrev).val());
+        }
+      }
+    }
+  });
+});
+
+$("[id^=ma09_diverse_]").each(function(){
+  var identifier = $(this).attr("id").replace("ma09_diverse_","");
+  var $grade = $("#ma09_grade_" + identifier);
+  var $attempt = $("#ma09_attempt_" + identifier);
+
+  if( $grade.val() != "0" && $attempt.val() != "0" ){
+    if(identifier == "thesis"){
+      $("#ma17_thesis_focusarea").hide();
+    }
+    $("#ma17_grade_"+ identifier).val($grade.val()).attr("disabled", true);
+    $("#ma17_attempt_" + identifier).val($attempt.val()).attr("disabled", true);;
+    $("#collapse_ma17_" + identifier).collapse("show");
+    $("#ma17_icon_" + identifier).show();
+  }
+});
+//### functionality for filtering select and others ###
+// strores the default values of all courses grouped by field-area
+// every select-box has the same values therefore load from the first one
+var ma17_courses = $("#ma17_course_1").html();
+// filters the options based on current selected options
+filter_selected_ma17_courses = function(){
+  var selected = new Array();
+
+  $("[id^=ma17_course_] option:selected").each(function(){
+      if($(this).val() != ""){
+        selected.push($(this).val());
+        if($(this).attr("incomp_with")!="[]"){
+          var temp = JSON.parse($(this).attr("incomp_with"));
+          for (var i = 0; i<temp.length;i++){
+            selected.push(temp[i]);
+          }
+        }
+      }
+  });
+
+  $("[id^=ma17_course_] option").each(function(){
+    if(!$(this).is(":selected")){
+      var disable = false;
+      for (var i = 0; i<selected.length;i++){
+        if( selected[i] == $(this).val()){
+          disable = true;
+        }
+      }
+      $(this).show();
+      if(disable){
+        $(this).hide();
+      }
+    }
+  });
+
+}
+
+// onchange-trigger for focusareas to filter option and append them to course-select
+// based on selected focusarea
+$("select[id^=ma17_focusarea_]").change( function(){
+  var $focusarea = $(this);
+  var selected_focusarea = $(this).val();
+  var filtered_options = $(ma17_courses).filter("optgroup[label='" + selected_focusarea + "']").html();
+  var identifier = $(this).attr("id").replace("ma17_focusarea_", "");
+
+  var selected_fa = new Array();
+  $("select[id^=ma17_focusarea_]").each(function(){
+    if($(this).val()!=""){
+      selected_fa.push($(this).val());
+    }
+  });
+
+  var flag;
+  $("[id=ma17_thesis_focusarea] option").each(function(){
+    if($(this).val() != "" ){
+      var count = 0;
+      for (var i = 0; i<selected_fa.length;i++){
+        if( $(this).val() == selected_fa[i] ){
+          count++;
+        }
+      }
+      if(count >= 3){
+        $(this).attr("disabled", false);
+      }else{
+        if($("#ma17_thesis_focusarea").val() == $(this).val()){
+            flag = true;
+        }
+        $(this).attr("disabled", true);
+      }
+    }
+  });
+
+  if(flag){
+    $("#ma17_thesis_focusarea").val("");
+    $("#ma17_grade_thesis").attr("disabled",true).val("0");
+    $("#ma17_attempt_thesis").attr("disabled",true).val("0");
+  }
+
+
+  $("select[id^=ma17_course_" + identifier).each(function(){
+    if (filtered_options){
+      $(this).html(filtered_options);
+      $("#ma17_mandatory_" + identifier).show();
+      $("#fa_badge_"+ identifier).text(selected_focusarea).attr("focusarea", selected_focusarea);
+      if($("#ma17_iconwarning_" + identifier).is(":visible")){
+        $("#ma17_iconwarning_" + identifier).hide();
+        $("#ma17_warningbox_" + identifier).hide();
+      }
+    } else {
+      $(this).empty();
+      $("#ma17_iconwarning_" + identifier).hide();
+      $("#ma17_warningbox_" + identifier).hide();
+      $("#ma17_mandatory_" + identifier).hide();
+      $("#fa_badge_"+ identifier).empty().removeAttr("focusarea");
+    }
+  });
+
+  $("#ma17_grade_"+ identifier).val("0").attr("disabled",true);
+  $("#ma17_attempt_"+ identifier).val("0").attr("disabled",true);
+  filter_selected_ma17_courses();
+});
+
+// filters the selected courses by hiding already selected ones and sets the Grade
+// and attempt if a course was transtitioned from the old PO09
+$("select[id^=ma17_course_]").change( function(){
+  var identifier = $(this).attr("id").replace("ma17_course_", "");
+  var $course_val =  $(this).val();
+
+  if($("option:selected", this).hasAttr("grade")){
+      $("#ma17_iconwarning_" + identifier).show();
+      $("#ma17_warningbox_" + identifier).show();
+      $("#ma17_grade_" + identifier)
+        .val($("option:selected", this).attr("grade"))
+        .attr("disabled", true);
+      $("#ma17_attempt_" + identifier)
+        .val($("option:selected", this).attr("attempt"))
+        .attr("disabled", true);
+  } else {
+    $("#ma17_iconwarning_" + identifier).hide();
+    $("#ma17_warningbox_" + identifier).hide();
+    $("#ma17_grade_" + identifier).val("0");
+    $("#ma17_attempt_" + identifier).val("0");
+    if ( $(this).val() != "" ){
+      $("#ma17_grade_" + identifier).attr("disabled", false);
+      $("#ma17_attempt_" + identifier).attr("disabled", false);
+    } else {
+      $("#ma17_grade_" + identifier).attr("disabled", true);
+      $("#ma17_attempt_" + identifier).attr("disabled", true);
+    }
+  }
+
+  filter_selected_ma17_courses();
+});
+
+$.fn.hasAttr = function(name) {
+   return this.attr(name) !== undefined;
+};
+
+$("[id^=ma17_grade_]").change(function(){
+  var identifier = $(this).attr("id").replace("ma17_grade_","");
+
+  if($("#ma17_grade_" + identifier).val() != "0" ){
+    if($("#ma17_attempt_" + identifier).val() == "0"){
+      $("#ma17_attempt_" + identifier).val("1");
+    }
+
+  }else{
+    $("#ma17_attempt_" + identifier).val("0");
+  }
+});
+
+$("[id^=ma17_attempt_]").change(function(){
+  var identifier = $(this).attr("id").replace("ma17_attempt_","");
+
+  if($("#ma17_attempt_" + identifier).val() == "0" ){
+    $("#ma17_grade_" + identifier).val("0");
+  }
+});
+
+$("#ma17_thesis_focusarea").change(function(){
+  if($(this).val()!=""){
+    $("#ma17_grade_thesis").attr("disabled",false);
+    $("#ma17_attempt_thesis").attr("disabled",false);
+  }else{
+    $("#ma17_grade_thesis").attr("disabled",true).val("0");
+    $("#ma17_attempt_thesis").attr("disabled",true).val("0");
+  }
+});

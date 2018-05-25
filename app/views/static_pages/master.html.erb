@@ -1,0 +1,277 @@
+<!-- class for contens of the whole master structure -->
+<div class="container">
+  <div class="jumbotron single" style="float:left;" id="ma09_panel">
+    <h3>Master PO 2009</h3>
+    <hr class="my-3">
+    <!-- card for contens for one part of the master structure -->
+    <div class="card secondary_panel" style="margin-top:5%;">
+      <!-- header -->
+      <div class="card-header card-header-format" title="For further information click info box">
+        <a class="collapsed" data-toggle="collapse" href="#ma_base_v2009"
+           style= "text-decoration: none; color:inherit;">
+          <i class="fa fa-plus-square"></i>
+          <span>Mandatory Fields</span>
+        </a>
+        <span class="badge badge-info float-right" data-toggle="modal" data-target="#info_mand09" style="cursor:pointer;">Info</span>
+        <div class="modal fade" id="info_mand09">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Master PO 2009</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body">
+                <div style="text-align:center;">
+                  <img src="/assets/ma_09" style="max-width:90%;"></img>
+                </div>
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="collapse" id="ma_base_v2009" >
+        <div class="card-body card-body-format">
+          <div style="font-size: 0.7rem; border: 1px solid lightgrey; border-radius: 5px;">
+            <div style="padding:0.5rem;">
+              <i class="fa fa-exclamation-triangle"></i>
+                If a course is not listed in any of the fields below, there is no direct
+                transmission regulation for it. Please contact the professor in charge or the
+                Prüfungssekretariat for further information.
+            </div>
+          </div>
+          <!-- mandatory fieldarea:swt -->
+          <%= render partial: "layouts/ma09_mandatory_course", locals: {field: @swt}%>
+          <!-- mandatory fieldarea:mua -->
+          <%= render partial: "layouts/ma09_mandatory_course_nodata", locals: {field: @mua}%>
+          <!-- mandatory fieldarea:ess -->
+          <%= render partial: "layouts/ma09_mandatory_course_nodata", locals: {field: @ess}%>
+          <!-- mandatory fieldarea:mmw -->
+          <%= render partial: "layouts/ma09_mandatory_course_nodata", locals: {field: @mmw}%>
+        </div>
+      </div>
+    </div>
+    <div class="card secondary_panel" style="margin-top:1.5%;">
+      <!-- header -->
+      <div class="card-header card-header-format">
+        <a class="collapsed" data-toggle="collapse" href="#collapse_module09_special"
+           style= "text-decoration: none; color:inherit;">
+          <i class="fa fa-plus-square"></i>
+          <span>Specialization</span>
+        </a>
+      </div>
+      <!-- container to wrap all card-body content for fluid collapse -->
+      <div class="collapse"  id="collapse_module09_special">
+        <div class="card-body card-body-format">
+          <!-- placeholder for moduleselect! -->
+           <%= select_tag "ma09_special_fieldarea",
+           options_for_select(@fieldareas.all.map{|area| area.field_name}.insert( 0 ,["Select Field Area for Specialization", ""] )),
+           {class:"custom-select form-control", autocomplete: "off"}%>
+          <!-- Specializationcourses based on module select by default hidden -->
+          <div id="ma09_modules_special" style="display:none;">
+            <hr class="my-2">
+            <div style="font-size: 0.7rem; border: 1px solid lightgrey; border-radius: 5px;">
+              <div style="padding:0.5rem;">
+                <i class="fa fa-exclamation-triangle"></i>
+                  If a course is not listed in any of the fields below, there is no direct
+                  transmission regulation for it. Please contact the professor in charge or the
+                  Prüfungssekretariat for further information.
+              </div>
+            </div>
+            <div class="card coursecard" >
+              <div class="card-header card-header-format">
+                  <a class="collapsed" data-toggle="collapse" href="#collapse_ma09_special1"
+                     style= "text-decoration: none; color:inherit;">
+                    <i class="fa fa-plus-square"></i>
+                    <span>First Module in Field with Seminar</span>
+                  </a>
+                  <span class="badge badge-pill rounded float-right" id="ECTS">ECTS 8.0</span>
+              </div>
+              <div class="collapse" id="collapse_ma09_special1">
+                <div class="card-body card-body-format" >
+                  <!-- content of the ma course -->
+                  <div class="input-group input-group-sm">
+                    <%= select_tag "ma09_module_special1", grouped_options_for_select(
+                      @fieldareas.all.map{ |group| [ group.field_name, group.v2009_ma_modules.map{
+                        |mod| [mod.module_name, mod.module_abrev]}.insert( 0, ["Select Module", ""])]}),
+                          {class:"custom-select form-control", autocomplete: "off"}%>
+                  </div>
+
+                  <!-- course container -->
+                  <div id="ma09_courses_module_special1" style="padding: 2%; display:none;">
+                    <!--checkbox -->
+                    <div class="input-group input-group-sm" id="ma09_seminarbox_special">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Seminar:</span>
+                      </div>
+                      <input id="ma09_seminar_special1" class="form-control" autocomplete="off" placeholder="Please enter a Seminar">
+                    </div>
+                    <hr class="my-2">
+                    <!-- second course -->
+                    <div class="input-group input-group-sm" style="margin-bottom:1%">
+                      <%= select_tag "ma09_course_special1_1", grouped_options_for_select(
+                        @fieldareamodules.map{ |group| [ group.module_abrev, group.ma_course_to_modules.map{
+                          |course| [course.ma_course.course_name, course.course_abrev,
+                            {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                            {class:"custom-select form-control", autocomplete: "off"}%>
+                    </div>
+
+                    <div class="input-group input-group-sm" style="padding-left:35%">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Grade</span>
+                      </div>
+                      <%= select_tag "ma09_grade_special1",
+                      options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+                      {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+                      <div class="input-group-prepend" style="margin-left:5px">
+                        <span class="input-group-text">Attempt</span>
+                      </div>
+                      <%= select_tag "ma09_attempt_special1", options_for_select((0..3).step(1)),
+                      {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card coursecard" >
+              <div class="card-header card-header-format">
+                  <a class="collapsed" data-toggle="collapse" href="#collapse_ma09_special2"
+                     style= "text-decoration: none; color:inherit;">
+                    <i class="fa fa-plus-square"></i>
+                    <span>Second Module in Field</span>
+                  </a>
+                  <span class="badge badge-pill rounded float-right" id="ECTS">ECTS 8.0</span>
+              </div>
+              <div class="collapse" id="collapse_ma09_special2">
+                <div class="card-body card-body-format">
+                  <!-- content of the ma course -->
+                  <div class="input-group input-group-sm">
+                    <%= select_tag "ma09_module_special2", grouped_options_for_select(
+                      @fieldareas.all.map{ |group| [ group.field_name, group.v2009_ma_modules.map{
+                        |mod| [mod.module_name, mod.module_abrev]}.insert( 0, ["Select Module", ""])]}),
+                          {class:"custom-select form-control", autocomplete: "off"}%>
+                  </div>
+
+                  <!-- course container -->
+                  <div id="ma09_courses_module_special2" style="padding: 2%; display:none;">
+                    <!-- first course -->
+                    <div class="input-group input-group-sm" style="margin-bottom:10px">
+                      <%= select_tag "ma09_course_special2_1", grouped_options_for_select(
+                        @fieldareamodules.map{ |group| [ group.module_abrev, group.ma_course_to_modules.map{
+                          |course| [course.ma_course.course_name, course.course_abrev,
+                            {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                            {class:"custom-select form-control", autocomplete: "off"}%>
+                    </div>
+                    <!-- second course -->
+                    <div class="input-group input-group-sm" style="margin-bottom:10px">
+                      <%= select_tag "ma09_course_special2_2", grouped_options_for_select(
+                        @fieldareamodules.map{ |group| [ group.module_abrev, group.ma_course_to_modules.map{
+                          |course| [course.ma_course.course_name, course.course_abrev,
+                            {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                            {class:"custom-select form-control", autocomplete: "off"}%>
+                    </div>
+
+                    <div class="input-group input-group-sm" style="padding-left:35%">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Grade</span>
+                      </div>
+                      <%= select_tag "ma09_grade_special2",
+                      options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+                      {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+                      <div class="input-group-prepend" style="margin-left:5px">
+                        <span class="input-group-text">Attempt</span>
+                      </div>
+                      <%= select_tag "ma09_attempt_special2", options_for_select((0..3).step(1)),
+                      {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-3">
+    <div class="card secondary_panel">
+      <!-- header -->
+      <div class="card-header card-header-format">
+        <a class="collapsed" data-toggle="collapse" href="#collapse_ma09_project"
+           style= "text-decoration: none; color:inherit;">
+          <i class="fa fa-plus-square"></i>
+          <span>Group Project</span>
+          <span class="badge badge-pill rounded" style="float:right" id="ECTS"> ECTS 30.0
+        </a>
+      </div>
+      <div class="collapse"  id="collapse_ma09_project">
+        <div class="card-body card-body-format">
+          <div class="input-group input-group-sm" id="ma09_diverse_project"
+              style="padding-left:20%; padding-right:20%;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Grade</span>
+            </div>
+            <%= select_tag "ma09_grade_project",
+              options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+              {class:"custom-select form-control", autocomplete: "off"} %>
+            <div class="input-group-prepend" style="margin-left:5px">
+              <span class="input-group-text">Attempt</span>
+            </div>
+            <%= select_tag "ma09_attempt_project", options_for_select((0..3).step(1)),
+              {class:"custom-select form-control", autocomplete: "off"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card secondary_panel" style="margin-top:1.5%;">
+      <!-- header -->
+      <div class="card-header card-header-format">
+        <a class="collapsed" data-toggle="collapse" href="#collapse_ma09_thesis"
+           style= "text-decoration: none; color:inherit;">
+          <i class="fa fa-plus-square"></i>
+          <span>Master Thesis</span>
+          <span class="badge badge-pill rounded" style="float:right" id="ECTS"> ECTS 30.0
+        </a>
+      </div>
+      <!-- container to wrap all card-body content for fluid collapse -->
+      <div class="collapse"  id="collapse_ma09_thesis">
+        <div class="card-body card-body-format">
+          <div class="input-group input-group-sm" id="ma09_diverse_thesis"
+              style="padding-left:20%; padding-right:20%;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Grade</span>
+            </div>
+            <%= select_tag "ma09_grade_thesis",
+              options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+              {class:"custom-select form-control", autocomplete: "off"} %>
+            <div class="input-group-prepend" style="margin-left:5px">
+              <span class="input-group-text">Attempt</span>
+            </div>
+            <%= select_tag "ma09_attempt_thesis", options_for_select((0..3).step(1)),
+              {class:"custom-select form-control", autocomplete: "off"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ma17">
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+<div class="container" style="margin-bottom:10%;">
+  <hr>
+  <div class="btn-toolbar justify-content-between">
+    <div>
+    </div>
+    <%= link_to "Transition", {controller: "static_pages", action: "ma_transition"}, class:"btn btn-lg btn-dark justify-content-between", remote: true %>
+    <div>
+    </div>
+  </div>
+</div>

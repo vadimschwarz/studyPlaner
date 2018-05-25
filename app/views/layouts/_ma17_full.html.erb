@@ -1,0 +1,242 @@
+<div class="jumbotron single" style="float:left;" id="ma17_panel" >
+  <div class="modal fade" id="info_transition_ma17">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header modal-header-success text-center">
+          <h5 class="modal-title w-100">Transition was finished!</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div style="text-align:left; margin-left: 10%; margin-right: 10%; width:80%;">
+            <h6>Changes within the new examination regulations are highlighted as follows:</h6>
+            <hr class="my-3">
+            <div style="margin-bottom:5%;">
+              <h6 style="font-weight:bold;">Mandatory Modules:</h6>
+              <div style="text-align:center;">
+                <img src="/assets/ma17_course_select" style="max-width:70%;margin-bottom:2%;"></img>
+              </div>
+              <small>Due to a greater diversity within the new master's course the transmitted courses
+                from the previous master's course need to be assigned individually to the focus areas listed in the Mandatory Modules.
+                Every passed course from the previous master's course can be transmitted to a course from the new master's course.
+                The transmitted courses are highlighted in green in the drop-down lists of the focus areas.
+                Sometimes one or more courses can be transmitted to a certain focus area, it is then up to the student
+                to decide which course should be transmitted.
+              </small>
+              <div style="text-align:center;margin-top:5%;">
+                <img src="/assets/ma17_course_highlight" style="max-width:70%;margin-bottom:2%;"></img>
+              </div>
+              <small>Green highlited courses were succesfully transmitted to the new
+                examination regulations and can be selected for the current focus area.</small>
+            </div>
+            <div>
+              <div style="text-align:center;">
+                <img src="/assets/ma17_course_check" style="max-width:70%;margin-bottom:2%;"></img>
+              </div>
+              <i class="fa fa-check"></i><small>: This Course was succesfully transmitteds.</small>
+            </div>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Master PO 2017</h3>
+  <hr class="my-3">
+    <!-- card for contens for one part of the master structure -->
+  <div class="card secondary_panel" style="margin-top:5%;">
+    <!-- header -->
+    <div class="card-header card-header-format" title="For further information click info box">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma17_mand_panel"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span>Mandatory Modules</span>
+      </a>
+      <span class="badge badge-info float-right" data-toggle="modal" data-target="#info_mand17" style="cursor:pointer;">Info</span>
+      <div class="modal fade" id="info_mand17">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Master PO 2009</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div style="text-align:center;">
+                <img src="/assets/ma_17" style="max-width:90%;"></img>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- container to wrap all card-body content for fluid collapse -->
+    <div class="collapse"  id="collapse_ma17_mand_panel">
+      <div class="card-body card-body-format">
+        <%= render partial: "layouts/ma17_mandatory_course", locals: {identifier: "1"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "2"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "3"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "4"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "5"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "6"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "7"}%>
+        <%= render partial: "layouts/ma17_mandatory_course_nodata", locals: {identifier: "8"}%>
+      </div>
+    </div>
+  </div>
+  <hr class="my-3">
+  <div class="card secondary_panel">
+    <!-- header -->
+    <div class="card-header card-header-format">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma17_seminars"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span>Seminars</span>
+      </a>
+      <i class="fa fa-check" style="margin-left:2px; display:none;" title="Changes are applied!" id="ma17_icon_seminars"></i>
+    </div>
+    <!-- container to wrap all card-body content for fluid collapse -->
+    <div class="collapse"  id="collapse_ma17_seminars">
+      <div class="card-body card-body-format">
+
+        <div class="input-group input-group-sm" id="ma17_seminarbox_1" style="margin-bottom:1%">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Seminar I:</span>
+          </div>
+          <input id="ma17_seminar1" class="form-control" autocomplete: "off" placeholder="Pleace enter a Seminar">
+        </div>
+        <div class="input-group input-group-sm" style="padding-left:40%">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Grade</span>
+          </div>
+          <%= select_tag "ma17_seminar1_grade",
+          options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text">Attempt</span>
+          </div>
+          <%= select_tag "ma17_seminar1_attempt", options_for_select((0..3).step(1)),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+        </div>
+
+        <hr class="my-2">
+
+        <div class="input-group input-group-sm" id="ma17_seminarbox_2" style="margin-bottom:1%">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Seminar II:</span>
+          </div>
+          <input id="ma17_seminar2" class="form-control" autocomplete: "off" placeholder="Pleace enter a Seminar">
+        </div>
+        <div class="input-group input-group-sm" style="padding-left:40%">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Grade</span>
+          </div>
+          <%= select_tag "ma17_seminar2_grade",
+          options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text">Attempt</span>
+          </div>
+          <%= select_tag "ma17_seminar2_attempt", options_for_select((0..3).step(1)),
+          {class:"custom-select form-control form-control-sm", autocomplete: "off"} %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card secondary_panel" style="margin-top:1.5%;">
+    <!-- header -->
+    <div class="card-header card-header-format">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma17_project"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span>Group Project</span>
+        <span class="badge badge-pill rounded" style="float:right" id="ECTS">ECTS 20.0
+      </a>
+      <i class="fa fa-check" style="margin-left:2px; display:none;" title="Changes are applied!" id="ma17_icon_project"></i>
+    </div>
+    <!-- container to wrap all card-body content for fluid collapse -->
+    <div class="collapse"  id="collapse_ma17_project">
+      <div class="card-body card-body-format">
+        <div style="font-size: 0.8rem; border: 1px solid lightgrey; border-radius: 5px; margin-bottom:1%;">
+          <div style="padding:0.5rem;">
+            Group Project underwent only minimal changes, therefore can transmissioned without any
+            restrictions. The grade and failed attempts are taken into account.
+          </div>
+        </div>
+        <div class="input-group input-group-sm" id="ma17_project"
+            style="padding-left:20%; padding-right:20%;">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Grade</span>
+          </div>
+          <%= select_tag "ma17_grade_project",
+            options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+            {class:"custom-select form-control", autocomplete: "off"} %>
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text">Attempt</span>
+          </div>
+          <%= select_tag "ma17_attempt_project", options_for_select((0..3).step(1)),
+            {class:"custom-select form-control", autocomplete: "off"} %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card secondary_panel" style="margin-top:1.5%;">
+    <!-- header -->
+    <div class="card-header card-header-format">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma17_thesis"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span>Master Thesis</span>
+        <span class="badge badge-pill rounded" style="float:right" id="ECTS"> ECTS 30.0
+      </a>
+      <i class="fa fa-check" style="margin-left:2px; display:none;" title="Changes are applied!" id="ma17_icon_thesis"></i>
+    </div>
+    <!-- container to wrap all card-body content for fluid collapse -->
+    <div class="collapse"  id="collapse_ma17_thesis">
+      <div class="card-body card-body-format">
+        <div style="font-size: 0.8rem; border: 1px solid lightgrey; border-radius: 5px; margin-bottom:0.5%;">
+          <div style="padding:0.5rem; margin-bottom:0.5%;">
+            <i class="fa fa-exclamation-triangle"></i>
+            If Master Thesis was passed according to the examination regulations of 2009,
+            it can be transmissioned without any further restrictions. If it wasn't succesfully or not yet passed,
+            a specialization in one of the listed focus areas needs to be selected.
+            Therefore at least 3 courses belonging to the selected focus area need to be passed.
+            The Master Thesis then needs to explore a topic concerning the selected focus area. Select a focus area:
+          </div>
+        </div>
+
+        <div class="input-group input-group-sm" style="margin-bottom: 1%;">
+          <%= select_tag "ma17_thesis_focusarea",
+          options_for_select( @focusareas.all.map{ |fa| [fa.field_name, fa.field_abrev, {disabled: "true"}]}.insert( 0 ,["Select Focus Area", ""] )),
+          {class:"custom-select form-control", autocomplete: "off"  }%>
+        </div>
+
+        <div class="input-group input-group-sm" id="ma17_diverse_thesis"
+            style="padding-left:20%; padding-right:20%;">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Grade</span>
+          </div>
+          <%= select_tag "ma17_grade_thesis",
+            options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+            {class:"custom-select form-control", autocomplete: "off", disabled: "true"} %>
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text">Attempt</span>
+          </div>
+          <%= select_tag "ma17_attempt_thesis", options_for_select((0..3).step(1)),
+            {class:"custom-select form-control", autocomplete: "off", disabled: "true"} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<button class="btn btn-dark btn-sm" style="display:none;" id="hs_button">Show Master PO 2009</button>

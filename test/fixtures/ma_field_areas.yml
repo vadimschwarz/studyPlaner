@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  field_abrev: MyString
+  field_name: MyString
+  field_version: MyString
+
+two:
+  field_abrev: MyString
+  field_name: MyString
+  field_version: MyString

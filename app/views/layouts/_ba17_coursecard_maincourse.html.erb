@@ -1,0 +1,49 @@
+<div class="card coursecard">
+  <div class="card-header" title="<%= title %><%= field.field_abrev %>: <%= field.field_name %>" style="padding-top:0.5rem; padding-bottom:0.7rem;">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_main_<%= field.field_abrev %>"
+         style= "text-decoration: none; color:inherit;">
+      <i class="fa fa-plus-square"></i>
+      <span style="font-size:0.8rem;"><%= field.field_name %></span>
+     </a>
+     <i id="ba17_iconwarning_<%= field.field_abrev %>" class="fa fa-exclamation-triangle" style="display:none;"></i>
+     <span class="badge badge-pill rounded float-right" id="<%= field.field_abrev %>" style="margin-left:5px;"><%= field.field_abrev %></span>
+     <span class="badge badge-pill rounded float-right" id="ECTS">ECTS 6.0</span>
+  </div>
+  <div class="collapse" id="collapse_main_<%= field.field_abrev %>">
+    <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.7rem;">
+      <div id="ba17_warningbox_<%= field.field_abrev %>" style="font-size: 0.7rem; border: 1px solid lightgrey; border-radius: 5px; display:none;">
+        <div style="padding:0.5rem;">
+          Important Notice: If the selected course was passed after SS17 according
+          the examination regulations from 2009, then a mandatory ungraded task needs
+          to be complied to pass the course. The appropriate task will be issued by
+          the professor in charge. Regardless of further mandatory tasks accomplished,
+          the grade and failed attempts remain the same.
+        </div>
+      </div>
+
+      <div class="input-group input-group-sm" style="margin-top:0.5%;">
+
+        <%= select_tag "ba17_maincourse_" + field.field_abrev,
+        options_for_select( field_courses.map{|f| [f.ba_maincourse.course_name, f.ba_maincourse.course_abrev,
+          {incomp_with: f.ba_maincourse.incompatibilities.pluck(:incomp_with).to_json }]}.insert( 0 ,["Select Course for SWE", ""] )),
+          {class:"custom-select form-control"} %>
+
+        <div class="input-group input-group-sm" style="padding-left:40%; margin-top:5px;">
+          <div class="input-group-prepend" >
+            <span class="input-group-text" style="font-size: 0.8rem;">Grade</span>
+          </div>
+          <%= select_tag "ba17_grade_" + field.field_abrev,
+            options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+          {class:"custom-select form-control", disabled: true} %>
+
+          <div class="input-group-prepend" style="margin-left:5px">
+            <span class="input-group-text" style="font-size: 0.8rem;">Attempt</span>
+          </div>
+          <%= select_tag "ba17_attempt_" + field.field_abrev, options_for_select((0..3).step(1)),
+            {class:"custom-select form-control", disabled: true} %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

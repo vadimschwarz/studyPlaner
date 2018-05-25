@@ -1,0 +1,233 @@
+$("#ba17").html('<%= j render partial: "layouts/ba17_full"%>');
+$("#ba09_panel").hide().removeClass("single");
+$("#collapse_base17").collapse("show");
+$("#collapse_main17").collapse("show");
+$("#info_transition_ba17").modal("show");
+
+$("#hs_button").show().click(function(){
+  if($("#ba09_panel").is(":visible")){
+    $(this).text("Show Bachelor PO 09");
+
+    $("#ba09_panel").hide();
+    $("#ba17_panel").addClass("single")
+      .removeClass("double-left");
+  } else {
+    $(this).text("Hide Bachelor PO 09");
+
+    $("#ba09_panel").show()
+      .addClass("double-right");
+    $("#ba17_panel").removeClass("single")
+      .addClass("double-left");
+  }
+});
+
+$("[id^=show_button_]").each(function(){
+  $(this).click(function(){
+    var id = $(this).attr("id").replace("show_button_ba","");
+    $("#collapse_base"+id).collapse("show");
+    $("#collapse_main"+id).collapse("show");
+  });
+});
+$("[id^=hide_button_]").each(function(){
+  $(this).click(function(){
+    var id = $(this).attr("id").replace("hide_button_ba","");
+    $("#collapse_base"+id).collapse("hide");
+    $("#collapse_main"+id).collapse("hide");
+  });
+});
+
+$("[id^=ba17_maincourse_]").each(function(){
+  $(this).change(function(){
+    var area = $(this).attr("id").replace("ba17_maincourse_", "");
+    var $grade = $("#ba17_grade_" + area);
+    var $attempt = $("#ba17_attempt_" + area);
+
+
+    var selected = new Array();
+
+    if($("option:selected", this).hasAttr("grade")){
+        $grade.val($("option:selected", this).attr("grade")).attr("disabled", true);
+        $attempt.val($("option:selected", this).attr("attempt")).attr("disabled", true);
+        $("#ba17_iconwarning_" + area).show();
+        $("#ba17_warningbox_" + area).show();
+
+    }else{
+      $grade.val("0");
+      $attempt.val("0");
+      $("#ba17_iconwarning_" + area).hide();
+      $("#ba17_warningbox_" + area).hide();
+
+      if ( $(this).val() != "" ){
+        $grade.attr("disabled", false);
+        $attempt.attr("disabled", false);
+      } else {
+        $grade.attr("disabled", true);
+        $attempt.attr("disabled", true);
+      }
+    }
+
+    $("[id^=ba17_maincourse_] option:selected").each(function(){
+      if($(this).val() != ""){
+        selected.push($(this).val());
+        if($(this).attr("incomp_with")!="[]"){
+          var temp = JSON.parse($(this).attr("incomp_with"));
+          for (var i = 0; i<temp.length;i++){
+            selected.push(temp[i]);
+          }
+        }
+      }
+    });
+
+    $("[id^=ba17_maincourse_] option").each(function(){
+      if(!$(this).is(":selected")){
+        var disable = false;
+        for (var i = 0; i<selected.length;i++){
+          if( selected[i] == $(this).val()){
+            disable = true;
+          }
+        }
+        $(this).show();
+        if(disable){
+          $(this).hide();
+        }
+      }
+    });
+
+  });
+});
+
+
+// transitions all courses from ba09 to equivalent ones in PO17
+// attribute "maps_to" of old courses (ba09) states where to transition for a given course
+$("[id^=ba09_basecourse_]").each(function(){
+  var course_abrev = $(this).attr("id").replace("ba09_basecourse_","");
+  var maps_to = $(this).attr("maps_to");
+
+  var $grade = $("#ba09_grade_" + course_abrev);
+  var $attempt = $("#ba09_attempt_" + course_abrev);
+
+  // special cases needs to be captured and can only be transitioned manually!
+  if( course_abrev == "GPI" || course_abrev == "GPII" ){
+    // checks whether all inputs are properly set!
+    if($("#ba09_grade_GPI").val() != "0" &&
+        $("#ba09_attempt_GPI").val() != "0" &&
+          $("#ba09_grade_GPII").val() != "0" &&
+            $("#ba09_attempt_GPII").val() != "0"){
+
+
+          var field_area = $("#ba17_basecourse_" + maps_to).attr("field_area");
+          if($("#ba09_grade_GPI").val() != "5.0" && $("#ba09_grade_GPII").val() != "5.0"){
+            $("#collapse_base_" + field_area).collapse("show");
+            $("#ba17_title_" + maps_to).attr("title","Transitions from the Courses Grundlagen der Programmierung I and 'Grundlagen der Programmierung II'.");
+
+
+            // setting the attempt.
+            var attempt = parseInt($("#ba09_attempt_GPI").val()) + parseInt($("#ba09_attempt_GPII").val());
+            if(attempt <= 2){
+              $("#ba17_attempt_"+ maps_to).val("1").attr("disabled", true);
+            }else{
+              $("#ba17_attempt_"+ maps_to).val("2").attr("disabled", true);
+            }
+            //setting the grade.
+            var grade = parseFloat($("#ba09_grade_GPI").val()) + parseFloat($("#ba09_grade_GPII").val());
+            var average = (grade / 2);
+            $("#ba17_grade_"+ maps_to).val(average.toFixed(1)).attr("disabled", true);
+            $("#iconcheck_ba17_" + maps_to).show();
+          } else {
+              $("#ba17_title_"+maps_to).attr("title","Transitions from the Courses Grundlagen der Programmierung I and 'Grundlagen der Programmierung II'.");
+            $("#ba17_iconwarning_" + maps_to).show();
+          }
+    }else{
+        $("#ba17_title_" + maps_to).attr("title","Transitions from the Courses Grundlagen der Programmierung I and 'Grundlagen der Programmierung II'.");
+      $("#ba17_iconwarning_" + maps_to).show();
+    }
+  } else {
+    // checks whether grade and attempt is not empty! if it is not; the transition cannot be made
+    if( $grade.val()!="0" && $attempt.val()!="0"){
+      var field_area = $("#ba17_basecourse_"+ maps_to).attr("field_area");
+      // decollapse the parent coursecard for feedback!
+      $("#ba17_title_" + maps_to).attr("title", "This course was transmitted from " + course_abrev + ": " + $("#ba09_title_" + course_abrev).text() );
+      $("#collapse_base_"+ field_area).collapse("show");
+      $("#iconcheck_ba17_"+ maps_to).show();
+
+      $("#ba17_grade_" + maps_to).val($grade.val()).attr("disabled", true);
+      $("#ba17_attempt_" + maps_to).val($attempt.val()).attr("disabled", true);
+    }
+  }
+});
+
+
+$("[id^=ba09_maincourse_]").each(function(){
+  var $this = $(this);
+  var field_abrev = $this.attr("id").replace("ba09_maincourse_","");
+  var $grade = $("#ba09_grade_"+ field_abrev);
+  var $attempt = $("#ba09_attempt_"+ field_abrev);
+  var sel_value = $this.val();
+
+  //special-cases!
+  if(sel_value == "ITS"){
+    if($grade.val()!="0" && $attempt.val()!="0"){
+          $("#ba17_grade_ITS").val( $("#ba09_grade_"+ field_abrev).val());
+          $("#ba17_attempt_ITS").val( $("#ba09_attempt_"+ field_abrev).val());
+          $("#collapse_base_CoSy").collapse();
+        }
+  } else {
+    // checks whether grade and attempt is not empty!
+    if($grade.val()!="0" && $attempt.val()!="0"){
+        $("[id^=ba17_maincourse_] option").each(function(){
+          var $this = $(this);
+          if(sel_value != "" && $this.val() == sel_value ){
+            $this.attr("grade", $grade.val());
+            $this.attr("attempt", $attempt.val());
+            $this.css("background-color","rgb(180, 237, 183)");
+            var area = $this.parent().attr("id").replace("ba17_maincourse_","");
+            $("#collapse_main_"+ area).collapse("show");
+          }
+        });
+    }
+  }
+});
+
+
+
+$("[id^=ba09_diverse_]").each(function(){
+  var identifier = $(this).attr("id").replace("ba09_diverse_","");
+  if($("#ba09_grade_" + identifier).val()!="0" && $("#ba09_attempt_" + identifier).val()!="0" ){
+    $("#collapse_main17_" + identifier).collapse("show");
+    $("#iconcheck_ba17_" + identifier).show();
+    $("#ba17_grade_" + identifier).val($("#ba09_grade_" + identifier).val()).attr("disabled", true);
+    $("#ba17_attempt_" + identifier).val($("#ba09_attempt_" + identifier).val()).attr("disabled", true);
+  }
+});
+
+$("#ba09_check_mentoring").each(function(){
+  if($(this).is(":checked")){
+    $("#ba17_check_mentoring").attr("checked", true).attr("disabled", true);
+  }
+});
+// checking the existence of attributes
+$.fn.hasAttr = function(name) {
+   return this.attr(name) !== undefined;
+};
+
+
+$("[id^=ba17_grade_]").change(function(){
+  var identifier = $(this).attr("id").replace("ba17_grade_","");
+
+  if($("#ba17_grade_" + identifier).val() != "0" ){
+    if($("#ba17_attempt_" + identifier).val() == "0"){
+      $("#ba17_attempt_" + identifier).val("1");
+    }
+
+  }else{
+    $("#ba17_attempt_" + identifier).val("0");
+  }
+});
+
+$("[id^=ba17_attempt_]").change(function(){
+  var identifier = $(this).attr("id").replace("ba17_attempt_","");
+
+  if($("#ba17_attempt_" + identifier).val() == "0" ){
+    $("#ba17_grade_" + identifier).val("0");
+  }
+});

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>studyPlaner</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="d-flex flex-column">
+      <%= render 'layouts/header' %>
+      <div class="container-fluid">
+      <%= yield %>
+      </div>
+      <button id="ToTop" class="btn btn-sm btn-dark" title="Go to top">To Top</button>
+    </div>
+  </body>
+</html>

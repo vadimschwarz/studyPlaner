@@ -1,0 +1,19 @@
+<div class="jumbotron container">
+  <h1 class="display-4">Hello and Welcome!</h1>
+  <p class="lead">This is a prototypical study application for the students in Computer Science of the University
+    of Paderborn which allows an accurate representation of the transmission from the examination regulations from
+    2009 to 2017. Its main purpose is to help students with the transmission of the examination regulations and further
+    study planning. All information needed concerning the transmission can be found here:
+    <a href="https://cs.uni-paderborn.de/studium/studienangebot/informatik-ab-2009/">Studienangebot</a>
+ </p>
+  <hr class="my-4">
+  <p>As a starting point, choose your current study program from the examination regulations of 2009:</p>
+  <p class="lead">
+    <%= link_to bachelor_path, class: "btn btn-dark btn-lg" do %>
+     Bachelor 2009
+    <% end %>
+    <%= link_to master_path, class: "btn btn-dark btn-lg" do %>
+     Master 2009
+    <% end %>
+  </p>
+</div>

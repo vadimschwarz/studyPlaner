@@ -1,0 +1,71 @@
+<div class="card coursecard">
+  <div class="card-header card-header-format" title="For the current field a module needs to be selected. The selected module further consits of two differing courses.">
+      <a class="collapsed" data-toggle="collapse" href="#collapse_ma09_<%=field.field_abrev%>"
+         style= "text-decoration: none; color:inherit;">
+        <i class="fa fa-plus-square"></i>
+        <span class="badge badge-pill rounded" style="float:right;" id="<%=field.field_abrev%>"
+          style="margin-left:5px"><%=field.field_abrev%>
+        </span>
+        <span class="badge badge-pill rounded" style="float:right;" id="ECTS">ECTS 8.0</span>
+        <span style="font-size:0.8rem;"><%=field.field_name%></span>
+      </a>
+  </div>
+
+  <div class="collapse" id="collapse_ma09_<%=field.field_abrev%>">
+    <div class="card-body card-body-format">
+      <!-- select module for a default fieldarea -->
+      <div class="input-group input-group-sm">
+        <%= select_tag "ma09_module_" + field.field_abrev,
+        options_for_select( field.v2009_ma_modules.map{|m|  [m.module_name, m.module_abrev] }.insert( 0 ,["Select Module", ""] )),
+        {class:"custom-select form-control", autocomplete: "off"} %>
+      </div>
+
+      <!-- course container -->
+      <div id="ma09_courses_module_<%=field.field_abrev%>" style="padding:2%; display:none;">
+        <!--checkbox -->
+        <div class="custom-control custom-checkbox" style="margin-bottom:5px; margin-left:5px">
+          <input type="checkbox" class="custom-control-input" id="check_<%=field.field_abrev%>" autocomplete="off">
+          <label class="custom-control-label" for="check_<%=field.field_abrev%>" style="font-size:0.9rem;">Seminar instead of Course</label>
+        </div>
+        <!-- first course -->
+        <div class="input-group input-group-sm" id="ma09_seminarbox_<%=field.field_abrev%>" style="display:none;">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Seminar:</span>
+          </div>
+          <input id="ma09_seminar_<%=field.field_abrev%>" class="form-control" autocomplete="off" placeholder="Please enter a Seminar">
+        </div>
+
+        <div class="input-group input-group-sm" style="margin-bottom:10px">
+          <%= select_tag "ma09_course_" + field.field_abrev + "_1", grouped_options_for_select(
+            field.v2009_ma_modules.map{ |group| [ group.module_abrev, group.ma_course_to_modules.map{
+              |course| [course.ma_course.course_name, course.course_abrev,
+                {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                {class:"custom-select form-control", autocomplete: "off" }%>
+        </div>
+        <hr class="my-2">
+        <!-- second course -->
+        <div class="input-group input-group-sm" style="margin-bottom:1%;">
+          <%= select_tag "ma09_course_"+field.field_abrev+"_2", grouped_options_for_select(
+            field.v2009_ma_modules.map{ |group| [ group.module_abrev, group.ma_course_to_modules.map{
+              |course| [course.ma_course.course_name, course.course_abrev, {incomp_with: course.ma_course.incompatibilities.pluck(:incomp_with).to_json}]}.insert( 0, ["Select Course", ""])]}),
+                {class:"custom-select form-control", autocomplete: "off"}%>
+        </div>
+
+       <div class="input-group input-group-sm" style="padding-left:35%">
+         <div class="input-group-prepend">
+           <span class="input-group-text" style="font-size: 0.8rem;">Grade</span>
+         </div>
+         <%= select_tag "ma09_grade_"+field.field_abrev,
+         options_for_select([0, 1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0]),
+         {class:"custom-select form-control", autocomplete: "off", disabled: "true"} %>
+
+         <div class="input-group-prepend" style="margin-left:5px">
+           <span class="input-group-text" style="font-size: 0.8rem;">Attempt</span>
+         </div>
+         <%= select_tag "ma09_attempt_"+field.field_abrev, options_for_select((0..3).step(1)),
+         {class:"custom-select form-control", autocomplete: "off", disabled: "true"} %>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
