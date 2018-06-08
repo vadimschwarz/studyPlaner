@@ -167,8 +167,9 @@ $("[id^=ba09_maincourse_]").each(function(){
   //special-cases!
   if(sel_value == "ITS"){
     if($grade.val()!="0" && $attempt.val()!="0"){
-          $("#ba17_grade_ITS").val( $("#ba09_grade_"+ field_abrev).val());
-          $("#ba17_attempt_ITS").val( $("#ba09_attempt_"+ field_abrev).val());
+          $("#ba17_grade_ITS").val( $("#ba09_grade_"+ field_abrev).val()).attr("disabled", true);
+          $("#ba17_attempt_ITS").val( $("#ba09_attempt_"+ field_abrev).val()).attr("disabled", true);
+          $("#iconcheck_ba17_ITS").show();
           $("#collapse_base_CoSy").collapse();
         }
   } else {
